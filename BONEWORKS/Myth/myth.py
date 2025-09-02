@@ -7,11 +7,14 @@ import random
 import time
 import datetime
 import getpass
+import shlex
+
+from fetch import *
 
 
-myth = ["EnterTheVoidway", "cat"]
+mythwords = ["EnterTheVoidway"]
 
-delay = random.randint(1, 4)
+DELAY = random.randint(1, 4)
 
 utc_time = datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S")
 username = getpass.getuser()
@@ -28,55 +31,48 @@ def login():
         print("Login: ", end="")
         loginame = input()
 
-        for i in range(3):
-            if loginame in username:
+        for _ in range(3):
+            if loginame == username:
                 print(
                     "Verifying user entitlement with quantum entanglement authenticator...\n"
                 )
-                status()
-                break
+                print("Status: ", end="")
+                time.sleep(DELAY)
+                print("Failed. Retrocausality detected")
+                time.sleep(2)
+                print("Deja Vu Zone security protocol initialized\n")
+                print("Termianl locked until further notice...")
+                run_command()
+                return
             else:
                 print("Error: Identification not recognized. Access denied")
                 break
     except KeyboardInterrupt as e:
         sys.exit("Error: Login incorrect")
     except Exception as e:
-        print("DUMP")
+        print()
 
 
-def status():
-    print("Status: ", end="")
-    time.sleep(delay)
-    print("Failed. Retrocausality detected")
-    time.sleep(2)
-    lockdown()
-
-
-def lockdown():
-    print("Deja Vu Zone security protocol initialized\n")
-    print("Termianl locked until further notice...")
-    run_cmd()
-
-
-def run_cmd():
+def run_command():
     try:
         while True:
             print("> ", end="")
-            cmd = input()
-            if cmd in ["help", "?"]:
-                print("There no help page for Myth")
-            elif cmd == "whoami":
-                print(username)
-            elif cmd in myth:
-                mythSaying()
-            elif cmd == "exit":
+            command_self = input()
+            command_args = shlex.split(command_self)
+            if command_self == "exit":
                 break
-            else:
-                print("Command not found")
-    except KeyboardInterrupt as e:
+            elif command_args:
+                command = command_args[0]
+                if command in commands:
+                    handler = commands[command]
+                    if callable(handler):
+                        handler(*command_args[1:])
+                    else:
+                        print(handler)
+                else:
+                    print(f"{command}: command not found")
+    except KeyboardInterrupt:
         sys.exit("Error: User manually logged out")
-    finally:
-        sys.exit("Excessive retry. Shutdown...")
 
 
 def mythSaying():
@@ -85,13 +81,29 @@ def mythSaying():
     print("THE POOL STORMS FORTH DOOMED, WE LIVE ON")
 
 
+def echo(*args):
+    print(" ".join(args))
+
+
+def whoami():
+    print(getpass.getuser())
+
+
+commands = {
+    "echo": echo,
+    "clear": clscr,
+    "whoami": whoami,
+}
+
+
 # Clear screen
 clscr()
-
 print("\033[32m")
 
-# Print motd
-print("""
+
+if __name__ == "__main__":
+    # Print motd
+    print("""
           ░         ░                                                           
          ░█░       ░█░   ▒█░▒████        █▓ ███████ ██████████ █ ████       █ TM
         ░███░     ░███░   ▒█░▒████      █▓        █ ████       █ ████       █   
@@ -110,6 +122,4 @@ Brought to you by
 _|  _| \\___/ _| _| \\___/ ___/ _| ___/ _\\_\\  
 ================================================================================
 """)
-
-if __name__ == "__main__":
     login()
