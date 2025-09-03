@@ -9,10 +9,8 @@ import datetime
 import getpass
 import shlex
 
-from fetch import *
+from myth_fetch import fetch
 
-
-mythwords = ["EnterTheVoidway"]
 
 DELAY = random.randint(1, 4)
 
@@ -50,7 +48,7 @@ def login():
     except KeyboardInterrupt as e:
         sys.exit("Error: Login incorrect")
     except Exception as e:
-        print()
+        print(e)
 
 
 def run_command():
@@ -88,18 +86,42 @@ def echo(*args):
 def whoami():
     print(getpass.getuser())
 
+def get_time():
+    now = datetime.datetime.now()
+    date_str = now.strftime("%Y.%m.%d")
+    time_str = now.strftime("%H:%M:%S")
+    print("==time====")
+    print(date_str)
+    print(time_str)
+    print("=========")
+
+def myth_help():
+    print("""
+    ==help============================
+    CLEAR          Clear screen
+    WHOAMI         Print username
+    TIME           Get time
+    FETCH          Display system info
+    ECHO [thing]   Print Message
+    HELP           Provides help for Myth™ commands
+    EXIT           Exit Myth™
+    ==================================
+    """)
+
 
 commands = {
     "echo": echo,
     "clear": clscr,
     "whoami": whoami,
+    "help": myth_help,
+    "EnterTheVoidway": mythSaying,
+    "fetch": fetch,
+    "time": get_time,
 }
 
 
 # Clear screen
 clscr()
-print("\033[32m")
-
 
 if __name__ == "__main__":
     # Print motd

@@ -1,13 +1,17 @@
-
 # CineCLI
 
-我们尝试临摹一些影视作品和电子游戏中的命令行程序界面。
+A collection of CLI simulations inspired by terminals and computer interfaces from films, TV shows, and video games.
 
-#### 目前有的：
+## Currently we have:
 
-- BONEWORKS 中的 Myth 终端界面
-- Control 中的打孔卡解谜图案、内部封锁字符画、FBC 终端字符画
-- Wargames 中的 WOPR 核弹发射序列、井字棋游戏
+- **BONEWORKS / BONELAB**: OldMyth terminal interface
+- **Control**: 
+  - Punch card puzzle pattern
+  - Internal lockdown ASCII art
+  - FBC terminal ASCII art
+- **WarGames**:
+  - WOPR nuclear launch sequence
+  - Tic-Tac-Toe
 
-
-
+---
+**Note**: This project is fan-made, not affiliated with any of the original creators or copyright holders.
