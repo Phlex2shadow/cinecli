@@ -2,7 +2,6 @@
 # Copyright (c) 2025 Alex's GlowCity Studio.
 
 import sys
-import linecache
 import random
 import time
 import datetime
@@ -18,7 +17,7 @@ utc_time = datetime.datetime.now(datetime.UTC).strftime("%H:%M:%S")
 username = getpass.getuser()
 
 
-def clscr():
+def clearscr():
     print("\033[H\033[J", end="")
 
 
@@ -48,7 +47,7 @@ def login():
     except KeyboardInterrupt as e:
         sys.exit("Error: Login incorrect")
     except Exception as e:
-        print(e)
+        print(f"Error {e}")
 
 
 def run_command():
@@ -65,10 +64,12 @@ def run_command():
                     handler = commands[command]
                     if callable(handler):
                         handler(*command_args[1:])
+                        print("")
                     else:
                         print(handler)
+                        print("")
                 else:
-                    print(f"{command}: command not found")
+                    print(f"{command}: command not found\n")
     except KeyboardInterrupt:
         sys.exit("Error: User manually logged out")
 
@@ -86,45 +87,48 @@ def echo(*args):
 def whoami():
     print(getpass.getuser())
 
-def get_time():
+
+def timedate():
     now = datetime.datetime.now()
-    date_str = now.strftime("%Y.%m.%d")
-    time_str = now.strftime("%H:%M:%S")
-    print("==time====")
-    print(date_str)
-    print(time_str)
-    print("=========")
+    formatted = now.strftime("%d/%m/%Y %H:%M:%S")
+    print("==Time=============")
+    print(formatted)
+
 
 def myth_help():
-    print("""
-    ==help============================
-    CLEAR          Clear screen
-    WHOAMI         Print username
-    TIME           Get time
-    FETCH          Display system info
-    ECHO [thing]   Print Message
-    HELP           Provides help for Myth™ commands
-    EXIT           Exit Myth™
-    ==================================
-    """)
+    help_output = """CLEAR         Clear the terminal screen
+WHOAMI        Print effective user name
+TIME          Display date and time
+FETCH         Display system infomation in visually
+ECHO [thing]  Display a line of text
+HELP          Provides help for Myth™ commands
+EXIT          Exit Myth™"""
+
+    lines = help_output.splitlines()
+    max_length = 0
+    for line in lines:
+        current_length = len(line)
+        if current_length > max_length:
+            max_length = current_length
+
+    print("==Help" + ("=" * (max_length - 6)))
+    print(help_output)
 
 
 commands = {
     "echo": echo,
-    "clear": clscr,
+    "clear": clearscr,
     "whoami": whoami,
     "help": myth_help,
     "EnterTheVoidway": mythSaying,
     "fetch": fetch,
-    "time": get_time,
+    "time": timedate,
 }
 
 
-# Clear screen
-clscr()
+clearscr()
 
 if __name__ == "__main__":
-    # Print motd
     print("""
           ░         ░                                                           
          ░█░       ░█░   ▒█░▒████        █▓ ███████ ██████████ █ ████       █ TM
